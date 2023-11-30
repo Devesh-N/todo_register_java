@@ -20,13 +20,13 @@ public class UserController {
     public String registerUser(@RequestBody User user) {
         userService.createUser(user.getUsername(), user.getPassword());
 
-        // Hardcoded email for simplicity
-        String emailContent = "{\"email\":\"example@example.com\"}";
+        // Construct email content with the user's username
+        String emailContent = String.format("{\"email\":\"%s\"}", user.getUsername());
 
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://13.233.137.8:5000"))
+                    .uri(URI.create("http://localhost:5000/send_email"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(emailContent))
                     .build();
